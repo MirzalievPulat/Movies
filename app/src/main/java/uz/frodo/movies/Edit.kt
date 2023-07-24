@@ -34,6 +34,10 @@ class Edit : AppCompatActivity() {
             if (name.isNotBlank() && authors.isNotBlank() && about.isNotBlank() && date.isNotBlank()) {
                 val film = Film(name, authors, about, date)
                 MySharedPref.editList(i2, film)
+                val ii = Intent()
+                ii.putExtra("add",film)
+                ii.putExtra("add2",i2)
+                setResult(RESULT_OK,ii)
                 finish()
             } else
                 Toast.makeText(this, "Fill the blank", Toast.LENGTH_SHORT).show()

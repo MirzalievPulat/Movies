@@ -24,8 +24,9 @@ class Add : AppCompatActivity() {
             if (name.isNotBlank() && authors.isNotBlank() && about.isNotBlank() && date.isNotBlank()){
                 val film = Film(name,authors,about,date)
                 MySharedPref.addList(film)
-
-                setResult(RESULT_OK)
+                val i = Intent()
+                i.putExtra("add",film)
+                setResult(RESULT_OK,i)
                 finish()
             }else
                 Toast.makeText(this, "Fill the blank", Toast.LENGTH_SHORT).show()

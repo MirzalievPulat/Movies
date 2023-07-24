@@ -48,7 +48,6 @@ object MySharedPref {
     fun editList(position:Int,film:Film){
         var updated = list
         updated[position] = film
-        println("$film")
         list = updated
     }
 }

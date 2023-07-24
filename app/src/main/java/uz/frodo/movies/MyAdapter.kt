@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class MyAdapter(var context:Context,var list: ArrayList<Film>):RecyclerView.Adapter<ViewHolder>() {
+class MyAdapter(var list: ArrayList<Film>,var onMyItemClickListener: OnMyItemClickListener):RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item,parent,false)
         return object :ViewHolder(view){}
@@ -27,37 +27,20 @@ class MyAdapter(var context:Context,var list: ArrayList<Film>):RecyclerView.Adap
         holder.itemView.findViewById<TextView>(R.id.item_date).text = list[position].date
 
         holder.itemView.setOnClickListener {
-            val i = Intent(context,Info::class.java)
-            i.putExtra("info",list[position])
-            context.startActivity(i)
+            onMyItemClickListener.infoItem(list[position])
         }
 
         holder.itemView.findViewById<Button>(R.id.item_edit).setOnClickListener {
-            val i = Intent(context,Edit::class.java)
-            i.putExtra("edit",list[position])
-            println("${list[position]}")
-            i.putExtra("edit2",position)
-            context.startActivity(i)
+            onMyItemClickListener.editItem(position)
         }
 
         holder.itemView.findViewById<Button>(R.id.item_delete).setOnClickListener {
-            MySharedPref.init(context)
-            MySharedPref.removeList(list[position])
-            list = MySharedPref.list
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position,list.size)
-
+            onMyItemClickListener.deleteItem(position)
         }
     }
-    fun addItem(){
-        MySharedPref.init(context)
-        list = MySharedPref.list
-        notifyItemInserted(list.size-1)
-    }
-
-    fun dataSet(){
-        MySharedPref.init(context)
-        list = MySharedPref.list
-        notifyDataSetChanged()
+    interface OnMyItemClickListener{
+        fun editItem(position: Int)
+        fun deleteItem( position: Int)
+        fun infoItem(film: Film)
     }
 }
